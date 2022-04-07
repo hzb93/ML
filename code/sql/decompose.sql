@@ -1,0 +1,1 @@
+select *from vehicle_forecast_m where months in ('{0}')
