@@ -41,12 +41,12 @@ from sklearn.preprocessing import * #数据预处理
 from imblearn.over_sampling import SMOTE,SMOTENC
 from sklearn.model_selection import train_test_split #数据切分
 from sklearn.model_selection import StratifiedShuffleSplit #分层采样
-from sklearn.linear_model import LogisticRegression as LR
+from sklearn.linear_model import LogisticRegression
 from pylab import *
 from IPython.core.interactiveshell import InteractiveShell #系统设置
 from dateutil.relativedelta import relativedelta
 from pandas.api.types import is_object_dtype
-from sklearn.ensemble import RandomForestClassifier as RFC
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import GridSearchCV
 from category_encoders import *
 from sklearn.metrics import *
@@ -59,7 +59,6 @@ from xgboost import XGBRegressor as XGBR
 from category_encoders import * #编码
 import re
 import cpca #从地址获取行政区域
-from sklearn import metrics #模型评价
 import missingno as msno #缺失值可视化
 import scipy.stats as st #数据分布
 import pandas_profiling #可视化数据报告
@@ -694,6 +693,7 @@ k = result.shape[0] - sum(result <= 0)
 
 
 # 6.1.1.5 相关性过滤
+corr_matrix = data.corr()
 
 # 6.1.1.5 IV值过滤
 
@@ -851,30 +851,38 @@ def fcast_sarimax(ts,exog_vars,test_exog_vars,n):
 ####################################################################################################
 
 # 8 模型评价
-# 8.1 分类模型评价
-# 8.1.1 精确率
-print('ACC:',accuracy_score(y_pred,y_true))
-# 8.1.2 准确率
-print('Precision:',metrics.precision_score(y_true,y_pred))
-# 8.1.3 召回率
-print('Recall:',metrics.recall_score(y_true,y_pred))
-# 8.1.4 f1
-print('F1-score:',metrics.f1_score(y_true,y_pred))
-# 8.1.5 AUC
-print('AUC score:',roc_auc_score(y_true,y_scores))
+# 8.1 训练集评价
+# 8.1.1 交叉验证
+cross_val_score(estimator=model, X=X, y=y, cv=3,scoring='roc_auc')
 
-# 8.2 回归模型评价
-# 8.2.1 MSE 均方误差
-print('MES:',metrics.mean_squared_error(y_pred,y_true))
-# 8.2.2 RMSE 均方根误差
-print('RMSE',np.sqrt(metrics.mean_squared_error(y_pred,y_true)))
-# 8.2.3 MAE 平均绝对误差
-print('MAE:',metrics.mean_absolute_error(y_pred,y_true))
-# 8.2.4 MAPE 平均绝对百分比误差
+# 8.2 测试集评价
+# 8.2.1 分类模型评价
+# 8.2.1.1 精确率
+print('ACC:',accuracy_score(y_true,y_pred))
+# 8.2.1.2 准确率
+print('Precision:',precision_score(y_true,y_pred))
+# 8.2.1.3 召回率
+print('Recall:',recall_score(y_true,y_pred))
+# 8.2.1.4 f1
+print('F1-score:',f1_score(y_true,y_pred))
+# 8.2.1.5 AUC
+print('AUC score:',roc_auc_score(y_true,y_scores))
+# 8.2.1.6 混淆矩阵
+confusion_matrix(y_true,y_pred)
+
+# 8.2.2 回归模型评价
+# 8.2.2.1 MSE 均方误差
+print('MES:',mean_squared_error(y_pred,y_true))
+# 8.2.2.2 RMSE 均方根误差
+print('RMSE',np.sqrt(mean_squared_error(y_pred,y_true)))
+# 8.2.2.3 MAE 平均绝对误差
+print('MAE:',mean_absolute_error(y_pred,y_true))
+# 8.2.2.4 MAPE 平均绝对百分比误差
 def mape(y_true,y_pred):
     return np.mean(np.abs((y_pred-y_true)/y_true))
 
 print('MAPE:',mape(y_true,y_pred))
+
 
 
 # 9 模型优化
