@@ -17,17 +17,19 @@
 ####################################################################################################
 # 1 导库
 import os
-import datetime
 import sys
+import time
+import datetime
+import logging
+import warnings #警告
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
 import pyodbc #数据库连接
 import pyspark
 import traceback
-import logging
 import scikitplot as skplt
-import matplotlib.pyplot as plt
 import scipy
-import numpy as np
-import pandas as pd
 import imblearn
 import xgboost as xgb
 import seaborn as sns
@@ -35,7 +37,6 @@ import openpyxl
 import lightgbm as lgbm
 import joblib
 import pymysql #mysql
-import warnings #警告
 from sklearn.feature_selection import *
 from sklearn.preprocessing import * #数据预处理
 from imblearn.over_sampling import SMOTE,SMOTENC
@@ -48,7 +49,6 @@ from dateutil.relativedelta import relativedelta
 from pandas.api.types import is_object_dtype
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import GridSearchCV
-from category_encoders import *
 from sklearn.metrics import *
 from imblearn.under_sampling import RandomUnderSampler
 from sklearn.svm import SVC
@@ -87,8 +87,7 @@ impala_info = eval(conf.get("sql_info", "impalainfo_dict"))
 
 
 # 2 系统设置
-'''
-%matplotlib inline
+# %matplotlib inline
 InteractiveShell.ast_node_interactivity = "all"
 plt.rcParams['font.sans-serif'] = ['SimHei']    # 定义使其正常显示中文字体黑体
 plt.rcParams['axes.unicode_minus'] = False      # 用来正常显示表示负号
@@ -96,7 +95,7 @@ pd.set_option('display.max_rows',None)
 pd.set_option('display.max_columns',None)
 pd.set_option('display.float_format',lambda x : '%.2f' % x) #禁用科学计数法
 warnings.filterwarnings("ignore")
-'''
+
 
 ####################################################################################################
 # 3 导入数据
@@ -878,10 +877,7 @@ print('RMSE',np.sqrt(mean_squared_error(y_pred,y_true)))
 # 8.2.2.3 MAE 平均绝对误差
 print('MAE:',mean_absolute_error(y_pred,y_true))
 # 8.2.2.4 MAPE 平均绝对百分比误差
-def mape(y_true,y_pred):
-    return np.mean(np.abs((y_pred-y_true)/y_true))
-
-print('MAPE:',mape(y_true,y_pred))
+print('MAPE:',np.mean(np.abs((y_pred-y_true)/y_true)))
 
 
 

@@ -1,13 +1,11 @@
-
-def cal(x,y):
-    for i in range(y):
-        z = x+i
-    return z
-
-a = cal(4,100)
-b = cal(2,4)
-print(a)
-
-import numpy as np
+import pandas as pd
+c = pd.DataFrame({"A": [1, 2, 3], "B": [4, 5, 6]})
+a = 1
+b = 2
 
 
+
+
+from pyspark.sql import SparkSession
+spark = SparkSession.builder.appName("SparkByExamples.com").getOrCreate()
+rdd = spark.sparkContext.parallelize(c)
