@@ -22,3 +22,24 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+
+
+import matplotlib
+matplotlib.use("module://imgcat")
+import matplotlib.pyplot as plt
+# 数据
+x = [1, 2, 3, 4, 5]  # x轴数据
+y = [2, 4, 6, 8, 10]  # y轴数据
+# 绘制折线图
+plt.plot(x, y)
+# 设置图表标题和坐标轴标签
+plt.title("Simple Line Chart")
+plt.xlabel("X-axis")
+plt.ylabel("Y-axis")
+# 显示图表
+plt.show()
+
+
+from imgcat import imgcat
+imgcat(open("/model/devmodel/hzb/intent/线索口径.jpg"))
